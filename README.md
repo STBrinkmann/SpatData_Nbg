@@ -3,8 +3,11 @@
 
 ## Project Overview
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14579522.svg)](https://doi.org/10.5281/zenodo.14579522)
+
 This project provides spatial and socioeconomic data for Nuremberg,
-Germany. Due to size constraints, all data has been uploaded to Zenodo.
+Germany. Due to size constraints, all data has been uploaded to
+[Zenodo](https://doi.org/10.5281/zenodo.14579522).
 
 ## Generated Datasets
 
