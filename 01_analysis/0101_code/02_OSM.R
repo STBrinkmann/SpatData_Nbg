@@ -92,26 +92,29 @@ q_greenspace <- opq(bbox = bb, timeout = 1000) %>%
     features = c(
       'leisure="park"',
       'leisure="recreation_ground"',
-      'boundary="nature_reserve"',
+      'landuse="park"',
+      'landuse="recreation_ground"',
+      'landuse="nature_reserve"',
       'landuse="forest"',
       'landuse="meadow"',
       'leisure="garden"',
-      'leisure="playground"',
-      'amenity="community_centre"'
+      'leisure="playground"'
     )
   ) %>%
   osmdata_sf()
 
 # 3 Intersect results with AOI, combine polygons and multipolygons
-greenspace_poly <- st_intersection(q_greenspace$osm_polygons, aoi)
-greenspace_mpoly <- st_intersection(q_greenspace$osm_multipolygons, aoi)
+greenspace_poly <- st_intersection(st_make_valid(q_greenspace$osm_polygons), aoi)
+greenspace_mpoly <- st_intersection(st_make_valid(q_greenspace$osm_multipolygons), aoi)
 
 greenspace_sf <- rbind(
   greenspace_poly  %>% select(access, geometry),
   greenspace_mpoly %>% select(access, geometry)
 ) %>%
   filter(!access %in% c("customers", "no", "permissive", "private")) %>%
-  select(-access)
+  select(-access) %>%
+  unique()
+mapview::mapview(greenspace_sf)
 
 # 4 Reproject & filter by size (> 1 ha), then remove duplicates
 greenspace_sf <- greenspace_sf %>%
