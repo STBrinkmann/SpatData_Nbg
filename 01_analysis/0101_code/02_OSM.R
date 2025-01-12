@@ -26,8 +26,8 @@ q_water <- opq(bbox = bb, timeout = 1000) %>%
   osmdata_sf()
 
 # 3. Intersect the results with your AOI to keep only what's inside
-water_poly <- st_intersection(q_water$osm_polygons, aoi)
-water_multipoly <- st_intersection(q_water$osm_multipolygons, aoi)
+water_poly <- st_intersection(st_make_valid(q_water$osm_polygons), st_buffer(aoi, 5000))
+water_multipoly <- st_intersection(st_make_valid(q_water$osm_multipolygons), st_buffer(aoi, 5000))
 
 # 4. Combine and reproject results back to EPSG:25832
 water_sf <- rbind(
@@ -55,8 +55,8 @@ q_parks <- opq(bbox = bb, timeout = 1000) %>%
   osmdata_sf()
 
 # 2. Intersect the results with your AOI to keep only what's inside
-parks_poly <- st_intersection(q_parks$osm_polygons, aoi)
-parks_multipoly <- st_intersection(q_parks$osm_multipolygons, aoi)
+parks_poly <- st_intersection(st_make_valid(q_parks$osm_polygons), st_buffer(aoi, 5000))
+parks_multipoly <- st_intersection(st_make_valid(q_parks$osm_multipolygons), st_buffer(aoi, 5000))
 
 # 3. Combine results
 parks_sf <- rbind(
@@ -104,8 +104,8 @@ q_greenspace <- opq(bbox = bb, timeout = 1000) %>%
   osmdata_sf()
 
 # 3 Intersect results with AOI, combine polygons and multipolygons
-greenspace_poly <- st_intersection(st_make_valid(q_greenspace$osm_polygons), aoi)
-greenspace_mpoly <- st_intersection(st_make_valid(q_greenspace$osm_multipolygons), aoi)
+greenspace_poly <- st_intersection(st_make_valid(q_greenspace$osm_polygons), st_buffer(aoi, 5000))
+greenspace_mpoly <- st_intersection(st_make_valid(q_greenspace$osm_multipolygons), st_buffer(aoi, 5000))
 
 greenspace_sf <- rbind(
   greenspace_poly  %>% select(access, geometry),
